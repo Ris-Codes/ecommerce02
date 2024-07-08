@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <h2>Checkout</h2>
+
+    <p>Order Reference: Order #{{.RefNumber}}</p>
+    <p>Total Amount: ₹{{.TotalAmount}}</p>
+
+    <h3>Shipping Address</h3>
+    <p>{{.Address.AddressLine1}}</p>
+    <p>{{.Address.AddressLine2}}</p>
+    <p>{{.Address.City}}, {{.Address.State}} {{.Address.PostalCode}}</p>
+    <p>{{.Address.Country}}</p>
+
+    <h3>Order Items</h3>
+    <ul>
+        {{range .OrderItems}}
+        <li>{{.Product.ProductName}} - Quantity: {{.Quantity}} - Price: ₹{{.Product.Price}}</li>
+        {{end}}
+    </ul>
+
+    <form id="payment-form">
+        <div id="payment-element">
+            <!-- Stripe Card Element will be inserted here. -->
+        </div>
+        <button type="submit" id="submit">Pay Now</button>
+    </form>
+
+    <script>
+        var stripe = Stripe('{{.StripePublishableKey}}');
+
+        var elements = stripe.elements();
+        var style = {
+            base: {
+                color: "#32325d",
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: "antialiased",
+                fontSize: "16px",
+                "::placeholder": {
+                    color: "#aab7c4"
+                }
+            },
+            invalid: {
+                color: "#fa755a",
+                iconColor: "#fa755a"
+            }
+        };
+        
+        var card = elements.create('card', {style: style});
+        card.mount('#payment-element');
+
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const {error} = await stripe.confirmCardPayment('{{.ClientSecret}}', {
+                payment_method: {
+                    card: card,
+                    billing_details: {
+                        name: '{{.UserName}}',
+                        email: '{{.UserEmail}}',
+                        phone: '{{.UserPhone}}',
+                        address: {
+                            line1: '{{.Address.AddressLine1}}',
+                            line2: '{{.Address.AddressLine2}}',
+                            city: '{{.Address.City}}',
+                            state: '{{.Address.State}}',
+                            postal_code: '{{.Address.PostalCode}}',
+                        }
+                    },
+                }
+            });
+
+            if (error) {
+                var errorElement = document.getElementById('error-message');
+                errorElement.textContent = error.message;
+            } else {
+                window.location.href = '/user/payment-success?order_id={{.OrderID}}';
+            }
+        });
+    </script>
+</body>
+</html>

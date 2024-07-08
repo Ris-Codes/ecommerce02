@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home</title>
+</head>
+<body>
+    <h2>Welcome {{.Username}}! &nbsp; &nbsp; &nbsp; 
+        <a style="text-decoration: none;" href="/user/account">Profile</a>
+        &nbsp; &nbsp; &nbsp; 
+        <a style="text-decoration: none;" href="/user/cart">Cart</a>
+        &nbsp; &nbsp; &nbsp; 
+        <a style="text-decoration: none;" href="/user/logout">Logout</a></h2>
+    <br>
+    {{if .Error}}
+    <p style="color:red;">{{.Error}}</p>
+    {{end}}
+    {{if .Success}}
+    <p style="color:green;">{{.Success}}</p>
+    {{end}}
+    
+    <form method="GET" action="/">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search" value="{{.Search}}">
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        {{range .Products}}
+        <br><br>
+        <img src="{{.ProductImage}}?h=100&w=100 alt="> 
+        <br><b>{{.ProductName}} </b>
+        <br><b>₹{{.Price}}</b> 
+        <br> {{.Description}}
+        <br> {{.Category.Name}}
+        <br><form method="POST" action="/user/cart/add/{{.ID}}" style="display:inline;">
+            <button type="submit">Add to Cart</button>
+        </form>
+        <br><br>
+        {{end}}
+    </ul>
+</body>
+</html>

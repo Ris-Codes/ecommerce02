@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Addresses</title>
+</head>
+<body>
+    <h2>Your Addresses</h2>
+    <a href="/">Back to Home</a>
+    <br>
+    <a href="/user/logout">Logout</a>
+
+    <ul>
+        {{range .Addresses}}
+        <li>
+            {{.AddressLine1}}
+            <br>{{.AddressLine2}}
+            <br>{{.City}}, {{.State}}
+            <br>{{.Country}}
+            <br>{{.PostalCode}} 
+            {{if .IsDefault}}(Default){{end}}
+            <br>
+            <form method="POST" action="/user/address/default/{{.ID}}" style="display:inline;">
+                <button type="submit" {{if .IsDefault}}disabled{{end}}>Set as Default</button>
+            </form>
+            <form method="POST" action="/user/address/delete/{{.ID}}" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+        <br><br>
+        {{end}}
+    </ul>
+
+    <h3>Add New Address</h3>
+    <form method="POST" action="/user/address/create">
+        <input type="text" name="addressLine1" placeholder="Address Line1" required><br><br>
+        <input type="text" name="addressLine2" placeholder="Address Line2" required><br><br>
+        <input type="text" name="city" placeholder="City" required>
+        <input type="text" name="state" placeholder="State" required><br><br>
+        <input type="text" name="postalCode" placeholder="Postal Code" required><br><br>
+        <input type="text" name="country" placeholder="Country" required><br><br>
+        <button type="submit">Add Address</button>
+    </form>
+</body>
+</html>

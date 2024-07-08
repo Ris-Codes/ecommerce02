@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - View All Orders</title>
+</head>
+<body>
+    <h1>All Orders</h1>
+
+    <a href="/admin/panel/">Go Back</a>
+    <br>
+    <a href="/admin/logout">Logout</a>
+    <br><br>
+    {{if .Error}}
+    <p style="color:red;">{{.Error}}</p>
+    {{end}}
+    {{if .Success}}
+    <p style="color:green;">{{.Success}}</p>
+    {{end}}
+    <table border="1">
+        <tr>
+            <th>Ref ID</th>
+            <th>User</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Total Amount</th>
+            <th>Status</th>
+            <th>Payment Status</th>
+            <th>Actions</th>
+        </tr>
+        {{range .Orders}}
+        <tr>
+            <td>{{.RefNumber}}</td>
+            <td>{{.UserName}}</td>
+            <td>{{.UserEmail}}</td>
+            <td>{{.UserPhone}}</td>
+            <td>{{.OrderTotal}}</td>
+            <td>{{.OrderStatus}}</td>
+            <td>{{.PaymentStatus}}</td>
+            <td>
+                <form action="/admin/panel/orders/edit/{{.ID}}" method="GET" style="display:inline;">
+                    <button type="submit">Edit</button>
+                </form>
+                <form action="/admin/panel/orders/delete/{{.ID}}" method="POST" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {{end}}
+    </table>
+</body>
+</html>

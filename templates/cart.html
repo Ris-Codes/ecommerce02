@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+</head>
+<body>
+    <h2>Cart</h2>
+    <a href="/">Back to Home</a>
+    <br><br>
+    <a href="/user/logout">Logout</a>
+    {{if .Error}}
+    <p style="color:red;">{{.Error}}</p>
+    {{end}}
+    {{if .Success}}
+    <p style="color:green;">{{.Success}}</p>
+    {{end}}
+    <h3> CartTotal: ₹{{.CartTotal}}</h3>
+    <form method="post" action="/user/order/create">
+        <button type="submit">Checkout Now</button>
+    </form>
+    <ul>
+        {{range .CartItems}}
+            <br>
+            <img src="{{.Product.ProductImage}}?h=100&w=100 alt=">
+            <br><b>{{.Product.ProductName}} </b>
+            <br><b>₹{{.Product.Price}}</b> 
+            <br>{{.Product.Description}}
+            <br><form method="POST" action="/user/cart/update/{{.ID}}" style="display:inline;">
+                <button type="submit" name="action" value="decrease" {{if eq .Quantity 1}}disabled{{end}}>-</button>
+                <input type="text" name="quantity" value="{{.Quantity}}" readonly style="width: 30px; text-align: center;">
+                <button type="submit" name="action" value="increase" {{if ge .Quantity .Product.Stock}}disabled{{end}}>+</button>
+            </form>
+            <form method="POST" action="/user/cart/remove/{{.ID}}" style="display:inline;">
+                <button type="submit">Remove</button>
+            </form>
+            <br>
+        {{end}}
+    </ul>
+</body>
+</html>

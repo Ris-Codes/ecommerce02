@@ -1,0 +1,40 @@
+<!-- templates/superadmin_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superadmin Dashboard</title>
+</head>
+<body>
+    <h2>Welcome, {{.AdminName}}! to your Dashboard</h2>
+    <a href="/admin/">View All Admins</a>
+    <br>
+    <a href="/admin/logout">Logout</a>
+
+    <h3>Create New Admin</h3>
+    <form method="POST" action="/admin/create">
+        <label for="username">Admin Name:</label>
+        <input type="text" id="username" name="username" required>
+        <br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br><br>
+        <label for="role">Role:</label>
+        <select id="role" name="role" required>
+            <option value="admin">Admin</option>
+        </select>
+        <br><br>
+        <button type="submit">Create</button>
+    </form>
+    {{if .error}}
+    <p style="color:red;">{{.error}}</p>
+    {{end}}
+    {{if .success}}
+    <p style="color:green;">{{.success}}</p>
+    {{end}}
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+</head>
+<body>
+    <h2>Users</h2>
+    {{if .error}}
+    <p style="color:red;">{{.error}}</p>
+    {{end}}
+    {{if .success}}
+    <p style="color:green;">{{.success}}</p>
+    {{end}}
+    <ul>
+        {{range .users}}
+        <li>
+            <form method="POST" action="/admin/panel/user_management/edit_user/{{.ID}}">
+                <label for="username_{{.ID}}">Username:</label>
+                <input type="text" id="username_{{.ID}}" name="username" value="{{.Username}}" required>
+
+                <label for="email_{{.ID}}">Email:</label>
+                <input type="email" id="email_{{.ID}}" name="email" value="{{.Email}}" required>
+
+                <button type="submit">Update</button>
+            </form>
+            <form method="POST" action="/admin/panel/user_management/delete_user/{{.ID}}" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+        <br>
+        {{end}}
+    </ul>
+    <a href="/admin/panel">Go back</a>
+    <br>
+    <a href="/admin/logout">Logout</a>
+</body>
+</html>

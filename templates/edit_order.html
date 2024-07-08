@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Order</title>
+</head>
+<body>
+    <h2>Edit Order</h2>
+    <form action="/admin/panel/orders/edit/{{.Order.ID}}" method="POST">
+        <label for="user_name">User Name</label>
+        <input type="text" id="user_name" name="user_name" value="{{.Order.UserName}}" readonly><br>
+        
+        <label for="order_total">Total Amount</label>
+        <input type="text" id="order_total" name="order_total" value="{{.Order.OrderTotal}}" readonly><br>
+
+        <label for="re_number">Reference Number</label>
+        <input type="text" id="ref_number" name="ref_number" value="{{.Order.RefNumber}}" readonly><br>
+
+        <label for="status_id">Status</label>
+        <select id="status_id" name="status_id">
+            {{range .Statuses}}
+            <option value="{{.ID}}" {{if eq .ID $.Order.OrderStatusID}}selected{{end}}>{{.Status}}</option>
+            {{end}}
+        </select><br>
+
+        <label for="payment_status">Payment Status</label>
+        <input type="text" id="payment_status" name="payment_status" value="{{.Order.PaymentStatus}}"><br>
+
+
+        <button type="submit">Update Order</button>
+    </form>
+</body>
+</html>

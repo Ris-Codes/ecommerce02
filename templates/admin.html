@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Admins</title>
+</head>
+<body> 
+    <a href="/admin/superadmin">Go Back</a>
+    <br>
+    <a href="/admin/logout">Logout</a>
+    <h2>Admins</h2>
+    {{if .error}}
+    <p style="color:red;">{{.error}}</p>
+    {{end}}
+    {{if .success}}
+    <p style="color:green;">{{.success}}</p>
+    {{end}}
+    <ul>
+        {{range .admins}}
+        <li>
+            <form method="POST" action="/admin/update/{{.ID}}">
+                <label for="username_{{.ID}}">Username:</label>
+                <input type="text" id="username_{{.ID}}" name="username" value="{{.Name}}" required>
+                <label for="role_{{.ID}}">Role:</label>
+                <select id="role_{{.ID}}" name="role" required>
+                    <option value="admin" {{if eq .Role "admin"}}selected{{end}}>Admin</option>
+                    <!-- <option value="superadmin" {{if eq .Role "superadmin"}}selected{{end}}>Superadmin</option> -->
+                </select>
+                <button type="submit">Update</button>
+            </form>
+            <form method="POST" action="/admin/delete/{{.ID}}" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+        <br>
+        {{end}}
+    </ul>
+   
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products</title>
+</head>
+<body>
+    <h2>
+    <a href="/admin/panel/products/add_product">Add New Product</a>
+    &nbsp; &nbsp;
+    <a href="/admin/panel/products/categories">Manage Categories</a>
+    &nbsp; &nbsp;
+    <a href="/admin/panel">Go back</a>
+    &nbsp; &nbsp;
+    <a href="/admin/logout">Logout</a>
+    </h2>
+    {{if .Error}}
+    <p style="color:red;">{{.Error}}</p>
+    {{end}}
+    {{if .Success}}
+    <p style="color:green;">{{.Success}}</p>
+    {{end}} 
+    <br>
+    <h2>All Products</h2>
+   
+    <form method="GET" action="/admin/panel/products">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search" value="{{.Search}}">
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        {{range .Products}}
+        <li>
+            Product ID: {{.ID}}
+            <br><img src="{{.ProductImage}}?h=100&w=100" alt=""> 
+            <br> Name: {{.ProductName}} 
+            <br> Price: ₹{{.Price}} 
+            <br> Description: {{.Description}}
+            <br> Stock: {{.Stock}}
+            <br> Category: {{.Category.Name}}
+            <br>
+            <form method="GET" action="/admin/panel/products/edit_products/{{.ID}}" style="display:inline;">
+                <button type="submit">Edit</button>
+            </form>
+            <form method="POST" action="/admin/panel/products/delete_products/{{.ID}}" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+        <br>
+        {{end}}
+    </ul>
+</body>
+</html>
